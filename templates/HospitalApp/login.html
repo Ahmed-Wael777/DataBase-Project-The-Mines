@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <title>Login</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playwrite+AU+SA:wght@100..400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/loginStyle.css'%}" />
+    </head>
+    <body class="gradient-background">
+      <div class="main-container mt-3">
+        <div class="title">
+            <h1 class="text-shadow-drop-bl">Welcome to <span>HeartCare</span> Hospital</h1>
+            <h3 class="subheading text-shadow-drop-bl ">Your Cardiovascular Health Matters</h3>
+        </div>
+       <div class="formContainer mt-4 shadow-drop-2-center border border-black-subtle rounded-3 shadow-drop-center">
+         <form method="post">
+             {% csrf_token %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="57" fill="#C5172E" class="bi bi-heart-pulse-fill mb-4 heartbeat" viewBox="0 0 16 16">
+                <path d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9z"/>
+                <path d="M.88 8C-2.427 1.68 4.41-2 7.823 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8z"/>
+              </svg>    
+              <h2 class="h4 mb-3 fw-normal login">Account Access Login</h2>
+            <div class="form-floating">
+                <input type="email" class="form-control" id="Input" name = "email" placeholder="name@example.com" required>
+                <label for="Input">Email address</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="Password" name = "password"  placeholder="Password" required>
+                <label for="Password">Password</label>
+              </div>
+             <div class="my-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" required>
+                  <option value="" disabled selected>Select your role</option>
+                  <option value="doctor">Doctor</option>
+                  <option value="patient">Patient</option>
+                </select>
+              </div>
+              <input class="btn btn-dark w-100 py-2 mt-4" type="submit">
+              <p class="mt-4 mb-3 text-body-secondary">Don't have an account? <a href="{% url 'signup' %}"> Sign up</a></p>
+            </form>
+           </div> 
+      </div>
+      <div >
+</div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    </body>
+</html>
