@@ -20,5 +20,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('myapp.urls')),  # Replace 'myapp' with your actual app name
+    path('', include('hospitalapp.urls')),  # Replace 'myapp' with your actual app name
 ]
