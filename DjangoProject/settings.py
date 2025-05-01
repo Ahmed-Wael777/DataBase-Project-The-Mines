@@ -74,11 +74,14 @@ WSGI_APPLICATION = 'DjangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'hospital_db',
+        'USER': 'postgres',
+        'PASSWORD': 'npg_5agxrIebW1jU',
+        'HOST': 'ep-quiet-truth-a2ccqqr0-pooler.eu-central-1.aws.neon.tech',
+        'PORT': '5432',  # usually 5432
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
