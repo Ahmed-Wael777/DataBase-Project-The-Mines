@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.db import connection
 
@@ -6,9 +7,10 @@ def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        is_doctor = request.POST.get('is_doctor') == 'on'  # checkbox from attallah
+        role = request.POST.get('role')  # 'doctor' or 'patient'
 
-        if is_doctor:
+
+        if role == "doctor":
             # Doctor login
             with connection.cursor() as cursor:
                 cursor.execute("SELECT id FROM doctor WHERE email = %s AND password = %s", [email, password])
@@ -20,9 +22,10 @@ def login_view(request):
                     cursor.execute("SELECT fname, lname, id FROM doctor WHERE id = %s", [doctor_id])
                     cols = [col[0] for col in cursor.description]
                     doctor = dict(zip(cols, cursor.fetchone()))
-                return render(request, 'welcome_doctor.html', {'data': doctor})
+                return render(request, 'home.html', {'data': doctor})
             else:
                 error = "Invalid email or password"
+                return render(request, 'HospitalApp/login.html', {'error': error})
 
         else:
             # Patient login
@@ -33,14 +36,16 @@ def login_view(request):
             if result:
                 patient_id = result[0]
                 with connection.cursor() as cursor:
-                    cursor.execute("SELECT fname, lname, id,bloodtype FROM patient WHERE id = %s", [patient_id])
+                    cursor.execute("SELECT * FROM patient WHERE id = %s", [patient_id])
                     cols = [col[0] for col in cursor.description]
                     patient = dict(zip(cols, cursor.fetchone()))
-                return render(request, 'welcome_patient.html', {'data': patient})
+                return render(request, 'home.html', {'data': patient})
             else:
                 error = "Invalid email or password"
+                return render(request, 'HospitalApp/login.html', {'error': error})
 
-    return render(request, 'login.html', {'error': error})
+
+    return render(request, 'HospitalApp/login.html', {'error': error})
 
 
 from django.shortcuts import render
@@ -58,21 +63,21 @@ def signup_view(request):
         is_doctor = request.POST.get('is_doctor') == 'on'  # Checkbox input
 
         # Check if any field is missing
-        if not all([email, password, birthdate, gender, fname, lname]):
-            error = "All fields are required."
-        else:
-            try:
-                table = 'doctor' if is_doctor else 'patient'
-                with connection.cursor() as cursor:
-                    cursor.execute(f"""
-                        INSERT INTO {table} (email, password, birthdate, gender, fname, lname)
-                        VALUES (%s, %s, %s, %s, %s, %s)
-                    """, [email, password, birthdate, gender, fname, lname])
-                return render(request, 'login.html', {'fname': fname}) ### what should be in context here??
-            except Exception as e:
-                error = "Error: " + str(e)
+        try:
+            table = 'doctor' if is_doctor else 'patient'
+            with connection.cursor() as cursor:
+                cursor.execute(f"""
+                    INSERT INTO {table} (email, password, birthdate, gender, fname, lname)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, [email, password, birthdate, gender, fname, lname])
+            return render(request, 'HospitalApp/login.html', {'fname': fname}) ### what should be in context here??
+        except Exception as e:
+            error = "Error: " + str(e)
 
-    return render(request, 'signup.html', {'error': error})
+    return render(request, 'HospitalApp/register.html', {'error': error})
 
 
+
+def main_view(request):
+    return render(request,'home.html')
 
