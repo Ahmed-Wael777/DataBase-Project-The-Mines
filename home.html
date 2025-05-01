@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <title>Patient Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="homeStyle.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color:  #8B322C;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="62" height="42" fill="currentColor" class="bi bi-heart-pulse heartbeat" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053.918 3.995.78 5.323 1.508 7H.43c-2.128-5.697 4.165-8.83 7.394-5.857q.09.083.176.171a3 3 0 0 1 .176-.17c3.23-2.974 9.522.159 7.394 5.856h-1.078c.728-1.677.59-3.005.108-3.947C13.486.878 10.4.28 8.717 2.01zM2.212 10h1.315C4.593 11.183 6.05 12.458 8 13.795c1.949-1.337 3.407-2.612 4.473-3.795h1.315c-1.265 1.566-3.14 3.25-5.788 5-2.648-1.75-4.523-3.434-5.788-5"/>
+                <path d="M10.464 3.314a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.5a.5.5 0 0 0 0 1H4a.5.5 0 0 0 .416-.223l1.473-2.209 1.647 4.118a.5.5 0 0 0 .945-.049l1.598-5.593 1.457 3.642A.5.5 0 0 0 12 9h3.5a.5.5 0 0 0 0-1h-3.162z"/>
+              </svg></a>
+            <button class ="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">CALENDAR</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">CONTACTS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">ECHO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">BILLING</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">REPORTS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">COMMUNICATIONS</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">NOTIFICATIONS</a></li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">+</button>
+                </form>
+                <!-- <span class="navbar-text ms-2">?</span> -->
+                <span class="navbar-text ms-2">Cardiology</span>
+            </div>
+        </div>
+    </nav>
+
+<div class="container mt-3">
+    <div class="row bg-light p-3 rounded">
+        <div class="col-md-6">
+            <h5>Neil S. | Patient ID: P130412 | Male, 25 years | Medical History | INR 200.00 due</h5>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-outline-dark me-2">VIEW PROFILE</button>
+            <button class="btn btn-outline-dark me-2">VIEW ECHO</button>
+            <button class="btn btn-outline-dark">VIEW BILLING</button>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-6" >
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" href="#">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Appointments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Communications</a></li>
+    </ul>
+</div>
+
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Patient Profile</h5>
+                        <div>
+                            <button class="btn btn-outline-dark btn-sm me-2">Change Photo</button>
+                            <button class="btn btn-dark btn-sm">Edit Patient Profile</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="./assets/patient.jpg" alt="Patient Photo" class="img-fluid rounded">
+                                <button class="btn btn-link mt-2">Change Photo</button>
+                            </div>
+                            <div class="col-md-8">
+                                <p><strong>Patient Name:</strong> Attallah</p>
+                                <p><strong>Patient ID:</strong> خخخخخخخخخخخ</p>
+                                <p><strong>Gender:</strong> Male</p>
+                                <p><strong>Date of Birth:</strong> 02/03/2004</p>
+                                <p><strong>Referred by:</strong> M3rsen ElFront 😹😹🤘🤘🤘</p>
+                                <p><strong>Blood Group:</strong> Sokar Sharpat 😹😹🤘🤘🤘</p>
+                                <p><strong>Family:</strong> Attallah <br>Hegazy Soliman</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Contact Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Primary Mobile No.:</strong> +918987654321</p>
+                        <p><strong>Secondary Mobile No.:</strong> +917895432101</p>
+                        <p><strong>Land Line Nos.:</strong> +918025432101</p>
+                        <p><strong>Email Address:</strong> neils@someemail.com</p>
+                        <p><strong>Street Address:</strong> #10 4TH MAIN 20TH CROSS</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Patient Notes</h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control mb-3" rows="3" placeholder="Type note here"></textarea>
+                        <p>Follow up check up on Wednesday<br>Dr. Rashmi G on 22 April 2013</p>
+                        <p>Needs wheelchair access.<br>Dr. Anurag on 19 April 2013</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Medical History</h5>
+                        <button class="btn btn-link btn-sm">Edit</button>
+                    </div>
+                    <div class="card-body">
+                        <h6>Allergies</h6>
+                        <p>Undergone Dental Treatment Earlier</p>
+                        <p>Low Blood Pressure</p>
+                        <h6 class="mt-3">Groups</h6>
+                        <p>Corporate Patients</p>
+                        <p>Has Insurance</p>
+                        <p>Smoker</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
