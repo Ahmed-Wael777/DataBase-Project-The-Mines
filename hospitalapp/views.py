@@ -73,6 +73,3 @@ def signup_view(request):
                 error = "Error: " + str(e)
 
     return render(request, 'signup.html', {'error': error})
-
-
-
