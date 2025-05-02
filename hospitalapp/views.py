@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.db import connection
+import psycopg2
+import base64
 
 def login_view(request):
     error = None
