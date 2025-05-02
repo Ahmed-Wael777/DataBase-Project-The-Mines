@@ -41,7 +41,7 @@
 <div class="container mt-3">
     <div class="row bg-light p-3 rounded">
         <div class="col-md-6">
-            <h5>Neil S. | Patient ID: P130412 | Male, 25 years | Medical History | INR 200.00 due</h5>
+            <h5> {{data.fname}} | ID: {{data.id}} | {{data.gender}},{{data.birthdate}} | Medical History | INR 200.00 due</h5>
         </div>
         <div class="col-md-6 text-end">
             <button class="btn btn-outline-dark me-2">VIEW PROFILE</button>
@@ -65,7 +65,11 @@
             <div class="col-md-6">
                 <div class="card mb-3">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>Patient Profile</h5>
+                        {% if role == "patient" %}
+                            <h5> Patient Profile </h5>
+                        {% elif role == "doctor" %}
+                            <h5> Doctor Profile </h5>
+                        {% endif %}
                         <div>
                             <button class="btn btn-outline-dark btn-sm me-2">Change Photo</button>
                             <button class="btn btn-dark btn-sm">Edit Patient Profile</button>

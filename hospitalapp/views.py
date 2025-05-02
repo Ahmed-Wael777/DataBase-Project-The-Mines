@@ -23,10 +23,10 @@ def login_view(request):
                     cursor.execute("SELECT * FROM doctor WHERE id = %s", [doctor_id])
                     cols = [col[0] for col in cursor.description]
                     doctor = dict(zip(cols, cursor.fetchone()))
-                return render(request, 'home.html', {'data': doctor})
+                return render(request, 'home.html', {'data': doctor,'role':role })
             else:
                 error = "Invalid email or password"
-                return render(request, 'HospitalApp/login.html', {'error': error})
+                return render(request, 'HospitalApp/login.html', {'error': error,})
 
         else:
             # Patient login
@@ -41,7 +41,7 @@ def login_view(request):
                     cursor.execute("SELECT * FROM patient WHERE id = %s", [patient_id])
                     cols = [col[0] for col in cursor.description]
                     patient = dict(zip(cols, cursor.fetchone()))
-                return render(request, 'home.html', {'data': patient})
+                return render(request, 'home.html', {'data': patient,'role':role})
             else:
                 error = "Invalid email or password"
                 return render(request, 'HospitalApp/login.html', {'error': error})
@@ -63,15 +63,19 @@ def signup_view(request):
         fname = request.POST.get('fname')
         lname = request.POST.get('lname')
         phone_number = request.POST.get('phone_number')
+        bloodtype = request.POST.get('bloodtype')
         role = request.POST.get('role')  # Checkbox input
         # Check if any field is missing
         try:
-            table = 'doctor' if role=="doctor" else 'patient'
+            if role=="doctor":
+                table = 'doctor'
+            elif role=="patient":
+                table = 'patient'
             with connection.cursor() as cursor:
                 cursor.execute(f"""
-                    INSERT INTO {table} (email, password, birthdate, gender, fname, lname,phone_number)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                """, [email, password, birthdate, gender, fname, lname, phone_number])
+                    INSERT INTO {table} (email, password, birthdate, gender, fname, lname,phone_number,bloodtype)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s,%s)
+                """, [email, password, birthdate, gender, fname, lname, phone_number,bloodtype])
             return render(request, 'HospitalApp/login.html', {'fname': fname}) ### what should be in context here??
         except Exception as e:
             error = "Error: " + str(e)
