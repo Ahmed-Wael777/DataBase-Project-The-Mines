@@ -41,7 +41,23 @@ def login_view(request):
                     cursor.execute("SELECT * FROM patient WHERE id = %s", [patient_id])
                     cols = [col[0] for col in cursor.description]
                     patient = dict(zip(cols, cursor.fetchone()))
-                return render(request, 'home.html', {'data': patient,'role':role})
+                    # Fetch patient diagnoses
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            "SELECT diagnosis FROM Patient_History WHERE pid = %s",
+                            [patient_id]
+                        )
+                        diagnoses = [row[0] for row in cursor.fetchall()]
+
+                    return render(
+                        request,
+                        'home.html',
+                        {
+                            'data': patient,
+                            'diagnoses': diagnoses,
+                            'role': 'patient'
+                        }
+                    )
             else:
                 error = "Invalid email or password"
                 return render(request, 'HospitalApp/login.html', {'error': error})
@@ -89,7 +105,7 @@ def update_patient(request):
     if not patient_id:
         return redirect('login')  # User must be logged in
 
-    message = None
+    message = "Hi there"
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -144,7 +160,7 @@ def update_patient(request):
         else:
             message = "No fields to update."
 
-    return render(request, 'update_patient.html', {'message': message})
+    return render(request, 'HospitalApp/update.html', {'message': message})
 
 
 def update_doctor(request):
@@ -209,3 +225,34 @@ def update_doctor(request):
 def main_view(request):
     return render(request,'home.html')
 
+def change_pic(request):
+    patient_id = request.session.get('patient_id')
+    message = ""
+
+    if request.method == 'POST':
+        uploaded_file = request.FILES.get('change_picture')  # must be in <input type="file" name="change_picture">
+        fields = []
+        values = []
+
+        if uploaded_file:
+            file_data = uploaded_file.read()  # Read binary data
+            fields.append("picture = %s")
+            values.append(file_data)
+
+        if fields:
+            values.append(patient_id)  # For WHERE clause
+            try:
+                with connection.cursor() as cursor:
+                    query = f"""
+                        UPDATE patient
+                        SET {", ".join(fields)}
+                        WHERE id = %s
+                    """
+                    cursor.execute(query, values)
+                message = "Patient picture updated successfully."
+            except Exception as e:
+                message = f"Error updating patient: {e}"
+        else:
+            message = "No fields to update."
+
+    return render(request, "home.html", {"message": message})
