@@ -71,10 +71,10 @@
                             <h5> Doctor Profile </h5>
                         {% endif %}
                         <div>
-                            <input type="file" id="fileInput" name="photo" accept="image/*" style="display: none;" onchange="this.form.submit()">
-                            <button type="button" class="btn btn-outline-dark btn-sm me-2" onclick="document.getElementById('fileInput').click();">
+                            <a href="{% url 'change_pic' %}"><button type="button" class="btn btn-outline-dark btn-sm me-2" >
                                 Change Photo
-                            </button>
+
+                            </button></a>
                             <a href="{% url 'update_patient' %}">
                             <button class="btn btn-dark btn-sm" >Edit Patient Profile</button>
                             </a>
@@ -83,12 +83,11 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-<<<<<<< HEAD
-                                <img src={{data.image_path}} alt="Patient Photo" class="img-fluid rounded">
-=======
-                                <img src={{ data.image_path }} alt="Patient Photo" class="img-fluid rounded">
-                                <button class="btn btn-link mt-2">Change Photo</button>
->>>>>>> c8c300e07b7dfb710b2a731566977d299f4652e4
+                                {% if picture_data %}
+                                    <img src="data:image/jpeg;base64,{{ base64_string }}" alt="Image" style="max-width: 200px;">
+                                {% else %}
+                                <p>No picture available.</p>
+                                {% endif %}
                             </div>
                             <div class="col-md-8">
                                 {% with full_name=data.fname|add:" "|add:data.lname %}

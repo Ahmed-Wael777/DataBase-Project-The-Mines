@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>Change Picture</title>
+</head>
+<body>
+    <h1>message = {{ message }}</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" id="fileInput" name="change_picture" accept="image/*" style="display: none;" onchange="this.form.submit()">
+        <button type="button" class="btn btn-outline-dark btn-sm me-2" onclick="document.getElementById('fileInput').click();">
+            Choose Picture
+        </button>
+    </form>
+
+</body>
+</html>

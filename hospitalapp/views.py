@@ -1,8 +1,9 @@
+import base64
+import imghdr
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.db import connection
-import psycopg2
-import base64
 
 def login_view(request):
     error = None
@@ -10,6 +11,9 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         role = request.POST.get('role')  # 'doctor' or 'patient'
+        picture_data = ""
+        base64_string = ""
+        img_type = "jpeg"
 
 
         if role == "doctor":
@@ -43,6 +47,17 @@ def login_view(request):
                     cursor.execute("SELECT * FROM patient WHERE id = %s", [patient_id])
                     cols = [col[0] for col in cursor.description]
                     patient = dict(zip(cols, cursor.fetchone()))
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT picture FROM patient WHERE id = %s", [patient_id])
+                        row = cursor.fetchone()
+                        if row and row[0]:
+                            picture_data = row[0]  # This should be the base64 string
+                            img_binary = base64.b64decode(picture_data)
+                            detected_type = imghdr.what(None, h=img_binary)
+                            img_type = detected_type if detected_type else "jpeg"
+                            base64_string = base64.b64encode(img_binary).decode('utf-8')
+
+                        #
                     # Fetch patient diagnoses
                     with connection.cursor() as cursor:
                         cursor.execute(
@@ -57,7 +72,10 @@ def login_view(request):
                         {
                             'data': patient,
                             'diagnoses': diagnoses,
-                            'role': 'patient'
+                            'role': 'patient',
+                            'picture_data': picture_data,
+                            'img_type': img_type,
+                            'base64_string': base64_string,
                         }
                     )
             else:
@@ -229,32 +247,41 @@ def main_view(request):
 
 def change_pic(request):
     patient_id = request.session.get('patient_id')
-    message = ""
+    message = "hh"
+    picture_data = None
+    img_type = "jpeg"  # default fallback
 
     if request.method == 'POST':
-        uploaded_file = request.FILES.get('change_picture')  # must be in <input type="file" name="change_picture">
-        fields = []
-        values = []
-
+        uploaded_file = request.FILES.get('change_picture')
         if uploaded_file:
-            file_data = uploaded_file.read()  # Read binary data
-            fields.append("picture = %s")
-            values.append(file_data)
-
-        if fields:
-            values.append(patient_id)  # For WHERE clause
             try:
+                file_bytes = uploaded_file.read()
+                img_type_detected = imghdr.what(None, h=file_bytes)
+                img_type = img_type_detected if img_type_detected else "jpeg"  # fallback
+
+                file_data = base64.b64encode(file_bytes).decode('utf-8')
+
                 with connection.cursor() as cursor:
-                    query = f"""
-                        UPDATE patient
-                        SET {", ".join(fields)}
-                        WHERE id = %s
-                    """
-                    cursor.execute(query, values)
+                    cursor.execute(
+                        "UPDATE patient SET picture = %s WHERE id = %s",
+                        [file_data, patient_id]
+                    )
+
                 message = "Patient picture updated successfully."
             except Exception as e:
                 message = f"Error updating patient: {e}"
         else:
-            message = "No fields to update."
+            message = "No file uploaded."
 
-    return render(request, "home.html", {"message": message})
+    # Fetch the updated picture and type
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT picture FROM patient WHERE id = %s", [patient_id])
+        row = cursor.fetchone()
+        if row and row[0]:
+            picture_data = row[0]
+
+    return render(request, "HospitalApp/preview.html", {
+        'message': message,
+        'picture_data': picture_data,
+        'img_type': img_type
+    })
