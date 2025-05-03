@@ -247,7 +247,7 @@ def main_view(request):
 
 def change_pic(request):
     patient_id = request.session.get('patient_id')
-    message = "hh"
+    message = ""
     picture_data = None
     img_type = "jpeg"  # default fallback
 
