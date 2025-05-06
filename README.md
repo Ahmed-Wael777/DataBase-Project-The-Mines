@@ -1,2 +1,2 @@
 # DataBase-Project-The-Mines
-![ER Diagram](ER Diagram) 
+![ER Diagram](ER_Diagram) 
