@@ -11,6 +11,7 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         role = request.POST.get('role')  # 'doctor' or 'patient'
+        request.session['role'] = role
         picture_data = ""
         base64_string = ""
         img_type = "jpeg"
@@ -246,42 +247,86 @@ def main_view(request):
     return render(request,'home.html')
 
 def change_pic(request):
-    patient_id = request.session.get('patient_id')
-    message = ""
-    picture_data = None
-    img_type = "jpeg"  # default fallback
+    if(request.session['role']=='patient'):
+        patient_id = request.session.get('patient_id')
+        message = ""
+        picture_data = None
+        img_type = "jpeg"  # default fallback
 
-    if request.method == 'POST':
-        uploaded_file = request.FILES.get('change_picture')
-        if uploaded_file:
-            try:
-                file_bytes = uploaded_file.read()
-                img_type_detected = imghdr.what(None, h=file_bytes)
-                img_type = img_type_detected if img_type_detected else "jpeg"  # fallback
+        if request.method == 'POST':
+            uploaded_file = request.FILES.get('change_picture')
+            if uploaded_file:
+                try:
+                    file_bytes = uploaded_file.read()
+                    img_type_detected = imghdr.what(None, h=file_bytes)
+                    img_type = img_type_detected if img_type_detected else "jpeg"  # fallback
 
-                file_data = base64.b64encode(file_bytes).decode('utf-8')
+                    file_data = base64.b64encode(file_bytes).decode('utf-8')
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        "UPDATE patient SET picture = %s WHERE id = %s",
-                        [file_data, patient_id]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            "UPDATE patient SET picture = %s WHERE id = %s",
+                            [file_data, patient_id]
+                        )
 
-                message = "Patient picture updated successfully."
-            except Exception as e:
-                message = f"Error updating patient: {e}"
-        else:
-            message = "No file uploaded."
+                    message = "Patient picture updated successfully."
+                except Exception as e:
+                    message = f"Error updating patient: {e}"
+            else:
+                message = "No file uploaded."
 
-    # Fetch the updated picture and type
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT picture FROM patient WHERE id = %s", [patient_id])
-        row = cursor.fetchone()
-        if row and row[0]:
-            picture_data = row[0]
+        # Fetch the updated picture and type
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT picture FROM patient WHERE id = %s", [patient_id])
+            row = cursor.fetchone()
+            if row and row[0]:
+                picture_data = row[0]
 
-    return render(request, "HospitalApp/preview.html", {
-        'message': message,
-        'picture_data': picture_data,
-        'img_type': img_type
-    })
+        return render(request, "HospitalApp/preview.html", {
+            'message': message,
+            'picture_data': picture_data,
+            'img_type': img_type
+        })
+    if (request.session['role'] == 'doctor'):
+        doctor_id = request.session.get('doctor_id')
+        message = ""
+        picture_data = None
+        img_type = "jpeg"  # default fallback
+
+        if request.method == 'POST':
+            uploaded_file = request.FILES.get('change_picture')
+            if uploaded_file:
+                try:
+                    file_bytes = uploaded_file.read()
+                    img_type_detected = imghdr.what(None, h=file_bytes)
+                    img_type = img_type_detected if img_type_detected else "jpeg"  # fallback
+
+                    file_data = base64.b64encode(file_bytes).decode('utf-8')
+
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            "UPDATE doctor SET picture = %s WHERE id = %s",
+                            [file_data, doctor_id]
+                        )
+
+                    message = "Doctor picture updated successfully."
+                except Exception as e:
+                    message = f"Error updating Doctor: {e}"
+            else:
+                message = "No file uploaded."
+
+        # Fetch the updated picture and type
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT picture FROM doctor WHERE id = %s", [doctor_id])
+            row = cursor.fetchone()
+            if row and row[0]:
+                picture_data = row[0]
+            print(picture_data)
+
+        return render(request, "HospitalApp/preview.html", {
+            'message': message,
+            'picture_data': picture_data,
+            'img_type': img_type
+        })
+def Communication(request):
+    return render(request, "HospitalApp/communication.html",{'role':request.session['role']})
